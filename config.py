@@ -26,7 +26,8 @@ class Config:
         self._configs["chunk_sizes"]       = None
 
         # Directories
-        self._configs["data_dir"]   = "./data"
+        self._configs["env_variable"]   = "./data"
+        self._configs["data_dir"]   = "TMPDIR"
         self._configs["cache_dir"]  = "./cache"
         self._configs["config_dir"] = "./config"
         self._configs["result_dir"] = "./results"
@@ -164,6 +165,10 @@ class Config:
     @property
     def data_dir(self):
         return self._configs["data_dir"]
+
+    @property
+    def env_variable(self):
+        return self._configs["env_variable"]
 
     @property
     def cache_dir(self):

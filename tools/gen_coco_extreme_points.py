@@ -4,10 +4,15 @@ import cv2
 import numpy as np
 import pickle
 import json
-SPLITS = ['val', 'train']
-ANN_PATH = '../data/coco/annotations/instances_{}2017.json'
-OUT_PATH = '../data/coco/annotations/instances_extreme_{}2017.json'
-IMG_DIR = '../data/coco/{}2017/'
+SPLITS = ['train', 'val']
+# SPLITS = ['val']
+# ANN_PATH = '../data/coco/annotations/instances_{}2017.json'
+ANN_PATH = '../data/ego_hands/annotations/annotations_{}.json'
+# ANN_PATH_TEST = '../data/ego_hands/annotations_test.json'
+# ANN_PATH_TRAIN = '../data/ego_hands/annotations_train.json'
+# OUT_PATH = '../data/coco/annotations/instances_extreme_{}2017.json'
+OUT_PATH = '../data/ego_hands/annotations/instances_extreme_{}_egohands.json'
+IMG_DIR = '../data/ego_hands/images/'
 DEBUG = False
 from scipy.spatial import ConvexHull
 
@@ -81,14 +86,17 @@ if __name__ == '__main__':
     coco = cocoapi.COCO(ANN_PATH.format(split))
     img_ids = coco.getImgIds()
     num_images = len(img_ids)
-    num_classes = 80
+    num_classes = 1
     tot_box = 0
     print('num_images', num_images)
     anns_all = data['annotations']
+    print(anns_all[0])
     for i, ann in enumerate(anns_all):
       tot_box += 1
       bbox = ann['bbox']
       seg = ann['segmentation']
+      
+      # Segmentation
       if type(seg) == list:
         if len(seg) == 1:
           pts = np.array(seg[0]).reshape(-1, 2)
@@ -97,6 +105,7 @@ if __name__ == '__main__':
           for v in seg:
             pts += v
           pts = np.array(pts).reshape(-1, 2)
+      # Bbox
       else:
         mask = coco.annToMask(ann) * 255
         tmp = np.where(mask > 0)
@@ -108,6 +117,7 @@ if __name__ == '__main__':
         img_info = coco.loadImgs(ids=[img_id])[0]
         img_path = IMG_DIR.format(split) + img_info['file_name']
         img = cv2.imread(img_path)
+        print(img_info['file_name'])
         if type(seg) == list:
           mask = np.zeros((img.shape[0], img.shape[1], 1), dtype=np.uint8)
           cv2.fillPoly(mask, [pts.astype(np.int32).reshape(-1, 1, 2)], (255,0,0))
@@ -119,6 +129,7 @@ if __name__ == '__main__':
         for j in range(extreme_points.shape[0]):
           cv2.circle(img, (extreme_points[j, 0], extreme_points[j, 1]),
                           5, cl[j], -1)
+        
         cv2.imshow('img', img)
         cv2.waitKey()
     print('tot_box', tot_box)   
