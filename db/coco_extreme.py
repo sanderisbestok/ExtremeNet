@@ -15,7 +15,9 @@ from pycocotools.cocoeval import COCOeval
 class MSCOCOExtreme(DETECTION):
     def __init__(self, db_config, split):
         super(MSCOCOExtreme, self).__init__(db_config)
-        data_dir   = system_configs.data_dir
+        # data_dir   = system_configs.data_dir
+        data_dir = os.path.join(os.environ[system_configs.env_variable], "sander", "data")
+        
         cache_dir  = system_configs.cache_dir
 
         self._split = split

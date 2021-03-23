@@ -15,7 +15,7 @@ from pycocotools.cocoeval import COCOeval
 class EGOHANDS(DETECTION):
     def __init__(self, db_config, split):
         super(EGOHANDS, self).__init__(db_config)
-        data_dir = os.environ[system_configs.env_variable]
+        data_dir = os.path.join(os.environ[system_configs.env_variable], "sander", "data")
         # print(tmp_dir)
         # data_dir   = os.path.join(tmp_dir, system_configs.data_dir)
         print(data_dir)
