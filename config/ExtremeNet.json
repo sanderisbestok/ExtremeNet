@@ -1,7 +1,7 @@
 {
     "system": {
         "dataset": "MSCOCOExtreme",
-        "batch_size": 16,
+        "batch_size": 15,
         "sampling_function": "kp_detection",
 
         "train_split": "train",
@@ -10,19 +10,20 @@
         "learning_rate": 0.00025,
         "decay_rate": 10,
 
-        "val_iter": 10,
+        "val_iter": 100,
 
         "opt_algo": "adam",
         "prefetch_size": 10,
 
-        "max_iter": 250000,
+        "max_iter": 1000000,
         "stepsize": 200000,
-        "snapshot": 50000,
+        "snapshot": 250,
 
-        "chunk_sizes": [4,4,4,4],
+        "chunk_sizes": [3,4,4,4],
 
         "env_variable": "TMPDIR",
-        "pretrain": "./cache/CornerNet_500000.pkl",
+        "pretrain": "./cache/ExtremeNet/ExtremeNet_9750.pkl",
+        
 
         "data_dir": "./data"
     },
@@ -45,7 +46,7 @@
         "test_scales": [1],
 
         "top_k": 40,
-        "categories": 80,
+        "categories": 1,
         "aggr_weight": 0.1,
         "scores_thresh": 0.1,
         "center_thresh": 0.1,

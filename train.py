@@ -11,6 +11,7 @@ import argparse
 import importlib
 import threading
 import traceback
+import test
 
 from tqdm import tqdm
 from utils import stdout_to_tqdm
@@ -151,10 +152,15 @@ def train(training_dbs, validation_db, start_iter=0, debug=False):
 
     print("training start...")
     nnet.cuda()
+
+    nnet.eval_mode()
+    nnet.calculate_bboxes(cfg_file)
+
+
     nnet.train_mode()
     avg_loss = AverageMeter()
     with stdout_to_tqdm() as save_stdout:
-        for iteration in tqdm(range(start_iter + 1, max_iteration + 1), file=save_stdout, ncols=80):
+        for iteration in tqdm(range(start_iter + 1, max_iteration + 1), file=save_stdout, ncols=1):        
             training = pinned_training_queue.get(block=True)
             training_loss = nnet.train(**training)
             avg_loss.update(training_loss.item())
@@ -165,11 +171,12 @@ def train(training_dbs, validation_db, start_iter=0, debug=False):
             del training_loss
 
             # if val_iter and validation_db.db_inds.size and iteration % val_iter == 0:
-            #     nnet.eval_mode()
-            #     validation = pinned_validation_queue.get(block=True)
-            #     validation_loss = nnet.validate(**validation)
-            #     print("validation loss at iteration {}: {}".format(iteration, validation_loss.item()))
-            #     nnet.train_mode()
+            nnet.eval_mode()
+                # validation = pinned_validation_queue.get(block=True)
+                # validation_loss = nnet.validate(**validation)
+            nnet.calculate_bboxes(cfg_file)
+                # print("validation loss at iteration {}: {}".format(iteration, validation_loss.item()))
+                # nnet.train_mode()
 
             if iteration % snapshot == 0:
                 nnet.save_params(iteration)
@@ -210,9 +217,12 @@ if __name__ == "__main__":
     # threads = max(torch.cuda.device_count() * 2, 4)
     threads = args.threads
     print("using {} threads".format(threads))
+  
     training_dbs  = [datasets[dataset](configs["db"], train_split) for _ in range(threads)]
     # Remove validation to save GPU resources
     # validation_db = datasets[dataset](configs["db"], val_split)
+    
+    # validation_db.db
 
     print("system config...")
     pprint.pprint(system_configs.full)
@@ -221,5 +231,7 @@ if __name__ == "__main__":
     pprint.pprint(training_dbs[0].configs)
 
     print("len of db: {}".format(len(training_dbs[0].db_inds)))
+    # print("len of valdb: {}".format(len(validation_db.db_inds)))
+    
     # train(training_dbs, validation_db, args.start_iter)
     train(training_dbs, None, args.start_iter, args.debug)

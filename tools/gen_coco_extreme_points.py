@@ -4,15 +4,12 @@ import cv2
 import numpy as np
 import pickle
 import json
-SPLITS = ['train', 'val']
-# SPLITS = ['val']
-# ANN_PATH = '../data/coco/annotations/instances_{}2017.json'
-ANN_PATH = '../data/ego_hands/annotations/annotations_{}.json'
-# ANN_PATH_TEST = '../data/ego_hands/annotations_test.json'
-# ANN_PATH_TRAIN = '../data/ego_hands/annotations_train.json'
-# OUT_PATH = '../data/coco/annotations/instances_extreme_{}2017.json'
-OUT_PATH = '../data/ego_hands/annotations/instances_extreme_{}_egohands.json'
-IMG_DIR = '../data/ego_hands/images/'
+import os
+
+SPLITS = ['val', 'train']
+ANN_PATH = "../../../data/extremenet/annotations/annotations_{}.json"
+OUT_PATH = "../../../data/extremenet/annotations/instances_extreme_{}.json"
+IMG_DIR = "../../../data/extremenet/images/{}/"
 DEBUG = False
 from scipy.spatial import ConvexHull
 
@@ -90,7 +87,7 @@ if __name__ == '__main__':
     tot_box = 0
     print('num_images', num_images)
     anns_all = data['annotations']
-    print(anns_all[0])
+    
     for i, ann in enumerate(anns_all):
       tot_box += 1
       bbox = ann['bbox']

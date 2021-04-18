@@ -17,29 +17,30 @@ class MSCOCOExtreme(DETECTION):
         super(MSCOCOExtreme, self).__init__(db_config)
         # data_dir   = system_configs.data_dir
         data_dir = os.path.join(os.environ[system_configs.env_variable], "sander", "data")
-        
-        cache_dir  = system_configs.cache_dir
 
+        cache_dir  = system_configs.cache_dir
+    
         self._split = split
         self._dataset = {
-            "train": "train2017",
-            "val": "val2017",
-            "testdev": "test2017"
+            "train": "train",
+            "val": "val",
+            "testdev": "test"
         }[self._split]
         
-        self._coco_dir = os.path.join(data_dir, "coco")
+        self._coco_dir = os.path.join(data_dir, "extremenet")
 
         self._label_dir  = os.path.join(self._coco_dir, "annotations")
-        
+
         if self._split == 'testdev':
             self._label_file = os.path.join(
-                self._label_dir, "image_info_test-dev2017.json")
+                self._label_dir, "annotations_test.json")
         else:
             self._label_file = os.path.join(self._label_dir, 
                                             "instances_extreme_{}.json")
             self._label_file = self._label_file.format(self._dataset)
 
         self._image_dir  = os.path.join(self._coco_dir, "images", self._dataset)
+
         self._image_file = os.path.join(self._image_dir, "{}")
 
         self._data = "coco_extreme"
@@ -56,14 +57,7 @@ class MSCOCOExtreme(DETECTION):
         ], dtype=np.float32)
 
         self._cat_ids = [
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 
-            14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 
-            24, 25, 27, 28, 31, 32, 33, 34, 35, 36, 
-            37, 38, 39, 40, 41, 42, 43, 44, 46, 47, 
-            48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 
-            58, 59, 60, 61, 62, 63, 64, 65, 67, 70, 
-            72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 
-            82, 84, 85, 86, 87, 88, 89, 90
+            1
         ]
         self._classes = {
             ind + 1: cat_id for ind, cat_id in enumerate(self._cat_ids)
@@ -121,6 +115,7 @@ class MSCOCOExtreme(DETECTION):
             self._coco.loadImgs(img_id)[0]["file_name"] 
             for img_id in coco_image_ids
         ]
+
         self._detections = {}
         self._extreme_pts = {}
         for ind, (coco_image_id, image_id) in enumerate(tqdm(zip(coco_image_ids, self._image_ids))):

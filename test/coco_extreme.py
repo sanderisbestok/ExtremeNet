@@ -67,6 +67,8 @@ def kp_detection(db, nnet, result_dir, debug=False, decode_func=kp_decode):
         db_inds = db.db_inds[:100] if debug else db.db_inds[:5000]
     num_images = db_inds.size
 
+    print(num_images)
+
     K             = db.configs["top_k"]
     aggr_weight   = db.configs["aggr_weight"]
     scores_thresh = db.configs["scores_thresh"]
@@ -86,10 +88,13 @@ def kp_detection(db, nnet, result_dir, debug=False, decode_func=kp_decode):
 
     top_bboxes = {}
     for ind in tqdm(range(0, num_images), ncols=80, desc="locating kps"):
+        bbox_out = []
+        
         db_ind = db_inds[ind]
 
         image_id   = db.image_ids(db_ind)
         image_file = db.image_file(db_ind)
+        
         image      = cv2.imread(image_file)
 
         height, width = image.shape[0:2]
@@ -236,6 +241,21 @@ def kp_detection(db, nnet, result_dir, debug=False, decode_func=kp_decode):
             cv2.imshow('out', image)
             cv2.waitKey()
 
+        for cls_ind in top_bboxes[image_id]:
+            for bbox in top_bboxes[image_id][cls_ind]:
+                bbox[2] -= bbox[0]
+                bbox[3] -= bbox[1]
+
+                bbox_out  = list(map(db._to_float, bbox[0:4]))
+                bbox_out.insert(0, float("{:.2f}".format(bbox[4]))
+                bbox_out.insert(0, cls_ind)
+                bboxes.append(bbox_out)
+
+        os.makedirs(os.path.join("/home/hansen", "results", "ExtremeNet", test_iter))
+        with open(os.path.join("/home/hansen", "results", "ExtremeNet", test_iter, image_file[:-4]+".txt"),"w+") as my_csv:
+            csvWriter = csv.writer(my_csv,delimiter=' ')
+            csvWriter.writerows(bboxes)    
+
     result_json = os.path.join(result_dir, "results.json")
     detections  = db.convert_to_coco(top_bboxes)
     with open(result_json, "w") as f:
@@ -243,9 +263,11 @@ def kp_detection(db, nnet, result_dir, debug=False, decode_func=kp_decode):
 
     cls_ids   = list(range(1, categories + 1))
     image_ids = [db.image_ids(ind) for ind in db_inds]
-    db.evaluate(result_json, cls_ids, image_ids)
+    # db.evaluate(result_json, cls_ids, image_ids)
     return 0
 
-def testing(db, nnet, result_dir, debug=False):
+def testing(db, nnet, result_dir, test_iter, debug=False):
+    global test_iter = test_iter
+
     return globals()[system_configs.sampling_function](
         db, nnet, result_dir, debug=debug)

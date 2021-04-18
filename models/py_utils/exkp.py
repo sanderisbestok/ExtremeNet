@@ -327,7 +327,7 @@ class CTLoss(nn.Module):
         return loss.unsqueeze(0)
 
 def _debug(image, t_heat, l_heat, b_heat, r_heat, ct_heat):
-    debugger = Debugger(num_classes=80)
+    debugger = Debugger(num_classes=1)
     k = 0
 
     t_heat = torch.sigmoid(t_heat)

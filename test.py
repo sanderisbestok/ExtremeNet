@@ -36,7 +36,7 @@ def make_dirs(directories):
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-def test(db, split, testiter, debug=False, suffix=None): 
+def test(db, split, testiter, debug=True, suffix=None): 
     result_dir = system_configs.result_dir
     result_dir = os.path.join(result_dir, str(testiter), split)
 
@@ -55,10 +55,10 @@ def test(db, split, testiter, debug=False, suffix=None):
 
     test_file = "test.{}".format(db.data)
     testing = importlib.import_module(test_file).testing
-
+    
     nnet.cuda()
     nnet.eval_mode()
-    testing(db, nnet, result_dir, debug=debug)
+    testing(db, nnet, result_dir, test_iter, debug=debug)
 
 if __name__ == "__main__":
     args = parse_args()
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     dataset = system_configs.dataset
     print("split: {}".format(split))
     testing_db = datasets[dataset](configs["db"], split)
-
+    
     print("system config...")
     pprint.pprint(system_configs.full)
 

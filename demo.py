@@ -24,7 +24,7 @@ from dextr import Dextr
 torch.backends.cudnn.benchmark = False
 
 class_name = [
-    '__background__', 'person', 'bicycle', 'car', 'motorcycle', 'airplane',
+    '__background__', 'hand', 'bicycle', 'car', 'motorcycle', 'airplane',
     'bus', 'train', 'truck', 'boat', 'traffic light', 'fire hydrant',
     'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse',
     'sheep', 'cow', 'elephant', 'bear', 'zebra', 'giraffe', 'backpack',
