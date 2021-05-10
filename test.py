@@ -45,20 +45,25 @@ def test(db, split, testiter, debug=True, suffix=None):
 
     make_dirs([result_dir])
 
-    test_iter = system_configs.max_iter if testiter is None else testiter
-    print("loading parameters at iteration: {}".format(test_iter))
+    for i in range(250, 10250, 250):
+        test_iter = i
+        print("loading parameters at iteration: {}".format(test_iter))
 
-    print("building neural network...")
-    nnet = NetworkFactory(db)
-    print("loading parameters...")
-    nnet.load_params(test_iter)
+        print("building neural network...")
+        nnet = NetworkFactory(db)
+        print("loading parameters...")
+        nnet.load_params(test_iter)
 
-    test_file = "test.{}".format(db.data)
-    testing = importlib.import_module(test_file).testing
+        test_file = "test.{}".format(db.data)
+        testing = importlib.import_module(test_file).testing
+        
+        nnet.cuda()
+        nnet.eval_mode()
+        testing(db, nnet, result_dir, test_iter, debug=debug)
+
+
+
     
-    nnet.cuda()
-    nnet.eval_mode()
-    testing(db, nnet, result_dir, test_iter, debug=debug)
 
 if __name__ == "__main__":
     args = parse_args()

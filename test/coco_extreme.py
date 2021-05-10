@@ -4,6 +4,7 @@ import json
 import numpy as np
 import torch
 import matplotlib.pyplot as plt
+import csv
 
 from tqdm import tqdm
 from config import system_configs
@@ -87,7 +88,10 @@ def kp_detection(db, nnet, result_dir, debug=False, decode_func=kp_decode):
     }[db.configs["nms_algorithm"]]
 
     top_bboxes = {}
+    os.makedirs(os.path.join("/home/hansen", "results", "ExtremeNet", str(test_iter)))
+
     for ind in tqdm(range(0, num_images), ncols=80, desc="locating kps"):
+        bboxes = []
         bbox_out = []
         
         db_ind = db_inds[ind]
@@ -243,31 +247,32 @@ def kp_detection(db, nnet, result_dir, debug=False, decode_func=kp_decode):
 
         for cls_ind in top_bboxes[image_id]:
             for bbox in top_bboxes[image_id][cls_ind]:
+                # if bbox[4] > 0.5:     
                 bbox[2] -= bbox[0]
                 bbox[3] -= bbox[1]
 
                 bbox_out  = list(map(db._to_float, bbox[0:4]))
-                bbox_out.insert(0, float("{:.2f}".format(bbox[4]))
+                bbox_out.insert(0, float("{:.2f}".format(bbox[4])))
                 bbox_out.insert(0, cls_ind)
                 bboxes.append(bbox_out)
 
-        os.makedirs(os.path.join("/home/hansen", "results", "ExtremeNet", test_iter))
-        with open(os.path.join("/home/hansen", "results", "ExtremeNet", test_iter, image_file[:-4]+".txt"),"w+") as my_csv:
+        with open(os.path.join("/home/hansen", "results", "ExtremeNet", str(test_iter), os.path.basename(image_file)[:-4]+".txt"),"w+") as my_csv:
             csvWriter = csv.writer(my_csv,delimiter=' ')
             csvWriter.writerows(bboxes)    
 
-    result_json = os.path.join(result_dir, "results.json")
-    detections  = db.convert_to_coco(top_bboxes)
-    with open(result_json, "w") as f:
-        json.dump(detections, f)
+    # result_json = os.path.join(result_dir, "results.json")
+    # detections  = db.convert_to_coco(top_bboxes)
+    # with open(result_json, "w") as f:
+    #     json.dump(detections, f)
 
-    cls_ids   = list(range(1, categories + 1))
-    image_ids = [db.image_ids(ind) for ind in db_inds]
+    # cls_ids   = list(range(1, categories + 1))
+    # image_ids = [db.image_ids(ind) for ind in db_inds]
     # db.evaluate(result_json, cls_ids, image_ids)
     return 0
 
-def testing(db, nnet, result_dir, test_iter, debug=False):
-    global test_iter = test_iter
+def testing(db, nnet, result_dir, iteration, debug=False):
+    global test_iter
+    test_iter = iteration
 
     return globals()[system_configs.sampling_function](
         db, nnet, result_dir, debug=debug)
