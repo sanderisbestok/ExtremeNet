@@ -115,7 +115,7 @@ def train(training_dbs, validation_db, start_iter=0, debug=False):
     training_tasks   = init_parallel_jobs(
         training_dbs, training_queue, sample_data, True, debug)
     # if val_iter:
-    #     validation_tasks = init_parallel_jobs([validation_db], validation_queue, sample_data, False)
+        # validation_tasks = init_parallel_jobs([validation_db], validation_queue, sample_data, False)
 
     training_pin_semaphore   = threading.Semaphore()
     # validation_pin_semaphore = threading.Semaphore()
@@ -153,8 +153,8 @@ def train(training_dbs, validation_db, start_iter=0, debug=False):
     print("training start...")
     nnet.cuda()
 
-    nnet.eval_mode()
-    nnet.calculate_bboxes(cfg_file)
+    # nnet.eval_mode()
+    # nnet.calculate_bboxes(cfg_file, 0)
 
 
     nnet.train_mode()
@@ -171,12 +171,12 @@ def train(training_dbs, validation_db, start_iter=0, debug=False):
             del training_loss
 
             # if val_iter and validation_db.db_inds.size and iteration % val_iter == 0:
-            nnet.eval_mode()
-                # validation = pinned_validation_queue.get(block=True)
-                # validation_loss = nnet.validate(**validation)
-            nnet.calculate_bboxes(cfg_file)
-                # print("validation loss at iteration {}: {}".format(iteration, validation_loss.item()))
-                # nnet.train_mode()
+            #     nnet.eval_mode()
+            #     # validation = pinned_validation_queue.get(block=True)
+            #     # validation_loss = nnet.validate(**validation)
+            #     nnet.calculate_bboxes(cfg_file, iteration)
+            #     # print("validation loss at iteration {}: {}".format(iteration, validation_loss.item()))
+            #     nnet.train_mode()
 
             if iteration % snapshot == 0:
                 nnet.save_params(iteration)

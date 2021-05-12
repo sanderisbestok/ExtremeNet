@@ -17,13 +17,11 @@
 
         "max_iter": 1000000,
         "stepsize": 200000,
-        "snapshot": 250,
+        "snapshot": 5,
 
         "chunk_sizes": [3,4,4,4],
 
-        "env_variable": "TMPDIR",
-        "pretrain": "./cache/ExtremeNet/ExtremeNet_9750.pkl",
-        
+        "env_variable": "TMPDIR",        
 
         "data_dir": "./data"
     },

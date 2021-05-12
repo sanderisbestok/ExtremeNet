@@ -2,10 +2,12 @@ import os
 import torch
 import importlib
 import torch.nn as nn
+import json
+
 
 from config import system_configs
 from models.py_utils.data_parallel import DataParallel
-
+from db.datasets import datasets
 
 torch.manual_seed(317)
 
@@ -123,3 +125,33 @@ class NetworkFactory(object):
         with open(cache_file, "wb") as f:
             params = self.model.state_dict()
             torch.save(params, f)
+
+    def calculate_bboxes(self, cfg_file, iteration):
+        print("JOEJOE")
+        with open(cfg_file, "r") as f:
+            configs = json.load(f)
+
+        train_split = system_configs.train_split
+        val_split   = system_configs.val_split
+        test_split  = system_configs.test_split
+
+        split = {
+            "training": train_split,
+            "validation": val_split,
+            "testing": test_split
+        }["validation"]
+
+        dataset = system_configs.dataset
+
+        testing_db = datasets[dataset](configs["db"], split)
+
+        test_file = "test.{}".format(testing_db.data)
+        testing = importlib.import_module(test_file).testing
+
+        result_dir = system_configs.result_dir
+        result_dir = os.path.join(result_dir, str(iteration), split)
+
+        if not os.path.exists(result_dir):
+            os.makedirs(result_dir)
+        
+        testing(testing_db, self, result_dir, iteration)

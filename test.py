@@ -45,7 +45,7 @@ def test(db, split, testiter, debug=True, suffix=None):
 
     make_dirs([result_dir])
 
-    for i in range(250, 10250, 250):
+    for i in range(5, 10250, 5):
         test_iter = i
         print("loading parameters at iteration: {}".format(test_iter))
 
