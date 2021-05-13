@@ -32,12 +32,21 @@ To install on the Lisa cluster:
    source activate extremenet_sander
    ```
 
-4. Clone Dextr in the Dextr folder
+4. Install extra packages
+   ```
+   pip install Cython
+   pip install torchvision
+   pip install --upgrade pip
+   pip install opencv-contrib-python
+   pip install pycocotools
+   ```
+
+5. Clone Dextr in the Dextr folder
    ```
    git clone https://github.com/scaelles/DEXTR-PyTorch/tree/67ca085f9509eeb2b168b07294d72f7625509fa5
    ```
 
-5. Compile NMS
+6. Compile NMS
    ```
    cd ./external
    make
