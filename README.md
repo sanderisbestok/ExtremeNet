@@ -1,4 +1,4 @@
-:warning: **This is not ther original Extremenet**: This version is edited so it can be used for my Thesis. For the official ExtremNet repo please go to [this repository](https://github.com/xingyizhou/ExtremeNet).
+:warning: **This is not the original Extremenet**: This version is edited so it can be used for my Thesis. For the official ExtremNet repo please go to [this repository](https://github.com/xingyizhou/ExtremeNet).
 
 ## Description
 This readme will provide, installation, execution and testing instructions. Experiments for the thesis are conducted on the Lisa cluster and all installations are done in an Anaconda Environment.
