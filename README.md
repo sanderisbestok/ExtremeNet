@@ -1,7 +1,7 @@
 :warning: **This is not ther original Extremenet**: This version is edited so it can be used for my Thesis. For the official ExtremNet repo please go to [this repository](https://github.com/xingyizhou/ExtremeNet).
 
 ## Description
-This readme will provide, installation, execution and testing instructions. Experiments for the thesis are conducted on the Lisa cluster and all installations are done in an Anaconda Environment.
+This readme will provide, installation, training and testing instructions. Experiments for the thesis are conducted on the Lisa cluster and all installations are done in an Anaconda Environment.
 
 Algorithms used for the thesis are:
 
@@ -52,7 +52,7 @@ The following job can be used to train the network if the network is installed i
 
 ```
 #!/bin/bash
-#SBATCH -t 04:00:00
+#SBATCH -t 08:00:00
 
 #SBATCH -p gpu
 #SBATCH -N 1
