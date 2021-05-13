@@ -33,6 +33,22 @@ class DummyModule(nn.Module):
     def forward(self, *xs, **kwargs):
         return self.module(*xs, **kwargs)
 
+    def load_my_state_dict(self, state_dict, strict=False):
+        own_state = self.state_dict()
+        for name, param in state_dict.items():
+            if name not in own_state:
+                 print("unkown name")
+                 continue
+            # if isinstance(param, Parameter):
+            #     print("instance")
+            #     # backwards compatibility for serialized parameters
+            #     param = param.data
+            if (own_state[name].size() == param.size()):
+                print("copy")
+                own_state[name].copy_(param)
+            else:
+                print("andere size")
+
 class NetworkFactory(object):
     def __init__(self, db):
         super(NetworkFactory, self).__init__()
@@ -107,10 +123,10 @@ class NetworkFactory(object):
             param_group["lr"] = lr
 
     def load_pretrained_params(self, pretrained_model):
-        print("loading from {}".format(pretrained_model))
+        print("loading pretrain from {}".format(pretrained_model))
         with open(pretrained_model, "rb") as f:
             params = torch.load(f)
-            self.model.load_state_dict(params, strict=False)
+            self.model.load_my_state_dict(params, strict=False)
 
     def load_params(self, iteration):
         cache_file = system_configs.snapshot_file.format(iteration)

@@ -45,8 +45,15 @@ def test(db, split, testiter, debug=True, suffix=None):
 
     make_dirs([result_dir])
 
-    for i in range(5, 10250, 5):
+    for i in range(0, 2550, 50):
         test_iter = i
+
+        if (test_iter == 0):
+            test_iter = 1
+
+
+        print(test_iter)
+
         print("loading parameters at iteration: {}".format(test_iter))
 
         print("building neural network...")
