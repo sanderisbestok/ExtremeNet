@@ -2,6 +2,8 @@ Validation can be run with:
 
 test.py ExtremeNet
 
+:warning: **If you are using mobile browser**: Be very careful here!
+
 # ExtremeNet: Training and Evaluation Code
 Code for **bottom-up** object detection by grouping extreme and center points:
 ![](readme/teaser.png)
