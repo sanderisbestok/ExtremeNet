@@ -61,7 +61,7 @@ The following job can be used to train the network if the network is installed i
 
 ```
 #!/bin/bash
-#SBATCH -t 08:00:00
+#SBATCH -t 06:00:00
 
 #SBATCH -p gpu
 #SBATCH -N 1
