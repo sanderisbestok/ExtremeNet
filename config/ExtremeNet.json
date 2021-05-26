@@ -15,7 +15,7 @@
         "opt_algo": "adam",
         "prefetch_size": 10,
 
-        "max_iter": 2500,
+        "max_iter": 100000,
         "stepsize": 200000,
         "snapshot": 50,
 
@@ -24,7 +24,6 @@
         "env_variable": "TMPDIR",
         "pretrain": "./cache/ExtremeNet_250000.pkl",
         
-
         "data_dir": "./data"
     },
     
