@@ -81,7 +81,7 @@ python train.py ExtremeNet
 Every 50 epochs the network will be saved, which can be used in the testing step.
 
 ## Validation & Testing
-The testing can be done using the following job.
+The validation can be done using the following job.
 
 ```
 #!/bin/bash
@@ -102,23 +102,18 @@ cd ~/networks/extremenet_sander/
 python val.py ExtremeNet
 ```
 
-### Single iteration testing
-To do the actual testing on a test database instead of validation you can use the same command. 
-
-python test.py ExtremNet but the ExtremeNet configuration file validation line should be changed to:
+### Testing
+To do the actual testing on a test database instead of validation you can use the following command
 
 ```
-"val_split": "test"
+python demo.py --cfg_file ExtremeNet --model_path path_to_model --demo path_to_image
 ```
 
-You don't actually use the test as a validation here, but this is the easiest way to get into the testing mode.
-
-
-Right now it is still hardcoded which pkl files to use. The for loop in test.py needs to be adjusted to edit which files to use.
 
 ## Extra 
 ExtremeNet visualiser can be used with the following command:
 
-python demo.py --cfg_file ExtremeNet --model_path path_to_model --demo path_to_image --show_mask
-
+```
+python demo.py --cfg_file ExtremeNet --model_path path_to_model --demo path_to_image
+```
 
