@@ -99,7 +99,7 @@ cp -r $HOME/data $TMPDIR/sander/
 
 source activate /home/hansen/anaconda3/envs/extremenet_sander
 cd ~/networks/extremenet_sander/
-python test.py ExtremeNet
+python val.py ExtremeNet
 ```
 
 ### Single iteration testing
