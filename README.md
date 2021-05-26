@@ -61,7 +61,7 @@ The following job can be used to train the network if the network is installed i
 
 ```
 #!/bin/bash
-#SBATCH -t 08:00:00
+#SBATCH -t 06:00:00
 
 #SBATCH -p gpu
 #SBATCH -N 1
@@ -80,8 +80,8 @@ python train.py ExtremeNet
 
 Every 50 epochs the network will be saved, which can be used in the testing step.
 
-## Testing
-The testing can be done using the following job.
+## Validation & Testing
+The validation can be done using the following job.
 
 ```
 #!/bin/bash
@@ -99,14 +99,21 @@ cp -r $HOME/data $TMPDIR/sander/
 
 source activate /home/hansen/anaconda3/envs/extremenet_sander
 cd ~/networks/extremenet_sander/
-python test.py ExtremeNet
+python val.py ExtremeNet
 ```
 
-Right now it is still hardcoded which pkl files to use. The for loop in test.py needs to be adjusted to edit which files to use.
+### Testing
+To do the actual testing on a test database instead of validation you can use the following command
+
+```
+python test.py --cfg_file ExtremeNet --model_path path_to_model --demo path_to_image
+```
+
 
 ## Extra 
 ExtremeNet visualiser can be used with the following command:
 
-python demo.py --cfg_file ExtremeNet --model_path path_to_model --demo path_to_image --show_mask
-
+```
+python demo.py --cfg_file ExtremeNet --model_path path_to_model --demo path_to_image
+```
 
