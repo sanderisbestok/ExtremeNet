@@ -106,7 +106,7 @@ python val.py ExtremeNet
 To do the actual testing on a test database instead of validation you can use the following command
 
 ```
-python demo.py --cfg_file ExtremeNet --model_path path_to_model --demo path_to_image
+python test.py --cfg_file ExtremeNet --model_path path_to_model --demo path_to_image
 ```
 
 
