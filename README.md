@@ -57,6 +57,12 @@ If installation is done on another system the same steps as described above can 
 ## Training
 To train we need the pre-trained ExtremeNet model which can be downloaded [here](https://drive.google.com/file/d/1re-A74WRvuhE528X6sWsg1eEbMG8dmE4/view?usp=sharing). Place this model in the cache folder.
 
+To prepare the data, extremepoints need to be generated this can be done in the extremenet Tools folder with:
+
+```
+python gen_coco_extreme_points.py 
+```
+
 The following job can be used to train the network if the network is installed in ~/networks/extremenet_sander with the environment extremenet_sander.
 
 ```
